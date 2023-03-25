@@ -1,5 +1,6 @@
-mod system;
-use system::*;
+mod components;
+mod systems;
+use systems::*;
 
 use bevy::prelude::*;
 
