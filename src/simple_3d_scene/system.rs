@@ -1,6 +1,9 @@
 use bevy::prelude::*;
+use bevy_rapier3d::prelude::*;
 
 use crate::camera_control::CameraController;
+
+use super::BOX_SIZE;
 
 pub fn simple_3d_scene(
     mut commands: Commands,
@@ -9,19 +12,25 @@ pub fn simple_3d_scene(
 ) {
     let camera_controller = CameraController::default();
 
-    // plane
-    commands.spawn(PbrBundle {
-        mesh: meshes.add(shape::Plane::from_size(5.0).into()),
-        material: materials.add(Color::rgb(0.3, 0.5, 0.3).into()),
-        ..default()
-    });
+    commands
+        .spawn(PbrBundle {
+            mesh: meshes.add(shape::Plane::from_size(10.0).into()),
+            material: materials.add(Color::rgb(0.3, 0.5, 0.3).into()),
+            ..default()
+        })
+        .insert(Collider::cuboid(100.0, 0.1, 100.0))
+        .insert(TransformBundle::from(Transform::from_xyz(0.0, 0.0, 0.0)));
+
     // cube
     commands.spawn(PbrBundle {
-        mesh: meshes.add(Mesh::from(shape::Cube { size: 1.0 })),
-        material: materials.add(Color::rgb(0.8, 0.7, 0.6).into()),
-        transform: Transform::from_xyz(0.0, 0.5, 0.0),
+        mesh: meshes.add(Mesh::from(shape::Box::new(
+            BOX_SIZE.x, BOX_SIZE.y, BOX_SIZE.z,
+        ))),
+        material: materials.add(Color::rgba(0.8, 0.7, 0.6, 0.2).into()),
+        transform: Transform::from_xyz(0.0, 2.5, 0.0),
         ..default()
     });
+
     // light
     commands.spawn(PointLightBundle {
         point_light: PointLight {
@@ -29,13 +38,14 @@ pub fn simple_3d_scene(
             shadows_enabled: true,
             ..default()
         },
-        transform: Transform::from_xyz(4.0, 8.0, 4.0),
+        transform: Transform::from_xyz(2.0, 4.5, 1.0),
         ..default()
     });
     // camera
     commands.spawn((
         Camera3dBundle {
-            transform: Transform::from_xyz(-2.0, 2.5, 5.0).looking_at(Vec3::ZERO, Vec3::Y),
+            transform: Transform::from_xyz(-BOX_SIZE.x * 0.9, BOX_SIZE.y * 1.5, BOX_SIZE.z)
+                .looking_at(Vec3::ZERO, Vec3::Y),
             ..default()
         },
         camera_controller,

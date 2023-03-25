@@ -1,16 +1,22 @@
+mod boids;
 mod camera_control;
 mod loading;
 mod menu;
 mod simple_3d_scene;
-
-use crate::loading::LoadingPlugin;
-use crate::menu::MenuPlugin;
+mod water;
 
 use bevy::app::App;
 #[cfg(debug_assertions)]
 use bevy::diagnostic::{FrameTimeDiagnosticsPlugin, LogDiagnosticsPlugin};
 use bevy::prelude::*;
+use bevy_rapier3d::{
+    prelude::{NoUserData, RapierPhysicsPlugin},
+    render::RapierDebugRenderPlugin,
+};
+use boids::BoidsPlugin;
 use camera_control::CameraControllerPlugin;
+use loading::LoadingPlugin;
+use menu::MenuPlugin;
 use simple_3d_scene::Simple3DScenePlugin;
 
 // This example game uses States to separate logic
@@ -19,9 +25,9 @@ use simple_3d_scene::Simple3DScenePlugin;
 #[derive(States, Default, Clone, Eq, PartialEq, Debug, Hash)]
 enum GameState {
     // During the loading State the LoadingPlugin will load our assets
-    #[default]
     Loading,
     // During this State the actual game logic is executed
+    #[default]
     Playing,
     // Here the menu is drawn and waiting for player interaction
     Menu,
@@ -35,6 +41,10 @@ impl Plugin for GamePlugin {
             .add_plugin(LoadingPlugin)
             .add_plugin(MenuPlugin)
             .add_plugin(Simple3DScenePlugin)
+            .add_plugin(RapierPhysicsPlugin::<NoUserData>::default())
+            .add_plugin(RapierDebugRenderPlugin::default())
+            // .add_plugin(WaterPlugin)
+            .add_plugin(BoidsPlugin)
             .add_plugin(CameraControllerPlugin);
 
         #[cfg(debug_assertions)]
