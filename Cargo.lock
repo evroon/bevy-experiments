@@ -494,7 +494,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "bevy_game"
+name = "bevy_experiments"
 version = "0.1.0"
 dependencies = [
  "bevy",

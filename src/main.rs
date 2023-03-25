@@ -6,6 +6,7 @@ use bevy::window::PrimaryWindow;
 use bevy::winit::WinitWindows;
 use bevy::DefaultPlugins;
 use bevy_game::GamePlugin;
+// use bevy_game::GamePlugin;
 use std::io::Cursor;
 use winit::window::Icon;
 
@@ -15,15 +16,16 @@ fn main() {
         .insert_resource(ClearColor(Color::rgb(0.4, 0.4, 0.4)))
         .add_plugins(DefaultPlugins.set(WindowPlugin {
             primary_window: Some(Window {
-                title: "Bevy game".to_string(), // ToDo
-                resolution: (800., 600.).into(),
+                title: "Bevy experiments".to_string(),
+                resolution: (1920., 1040.).into(),
                 canvas: Some("#bevy".to_owned()),
                 ..default()
             }),
             ..default()
         }))
-        .add_plugin(GamePlugin)
+        // .add_plugin(GamePlugin)
         .add_system(set_window_icon.on_startup())
+        .add_plugin(GamePlugin)
         .run();
 }
 
