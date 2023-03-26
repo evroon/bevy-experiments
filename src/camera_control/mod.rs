@@ -49,7 +49,7 @@ impl Default for CameraController {
             key_up: KeyCode::E,
             key_down: KeyCode::Q,
             key_run: KeyCode::LShift,
-            mouse_key_enable_mouse: MouseButton::Right,
+            mouse_key_enable_mouse: MouseButton::Middle,
             keyboard_key_enable_mouse: KeyCode::M,
             walk_speed: 5.0,
             run_speed: 15.0,

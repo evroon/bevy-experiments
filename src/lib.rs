@@ -2,6 +2,7 @@ mod boids;
 mod camera_control;
 mod loading;
 mod menu;
+mod rapier_demo;
 mod simple_3d_scene;
 mod water;
 
@@ -13,10 +14,10 @@ use bevy_rapier3d::{
     prelude::{NoUserData, RapierPhysicsPlugin},
     render::RapierDebugRenderPlugin,
 };
-use boids::BoidsPlugin;
 use camera_control::CameraControllerPlugin;
 use loading::LoadingPlugin;
 use menu::MenuPlugin;
+use rapier_demo::RapierDemoPlugin;
 use simple_3d_scene::Simple3DScenePlugin;
 
 // This example game uses States to separate logic
@@ -44,7 +45,8 @@ impl Plugin for GamePlugin {
             .add_plugin(RapierPhysicsPlugin::<NoUserData>::default())
             .add_plugin(RapierDebugRenderPlugin::default())
             // .add_plugin(WaterPlugin)
-            .add_plugin(BoidsPlugin)
+            // .add_plugin(BoidsPlugin)
+            .add_plugin(RapierDemoPlugin)
             .add_plugin(CameraControllerPlugin);
 
         #[cfg(debug_assertions)]

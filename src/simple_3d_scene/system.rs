@@ -12,6 +12,9 @@ pub fn simple_3d_scene(
 ) {
     let camera_controller = CameraController::default();
 
+    let mut plane_transform = Transform::from_xyz(0.0, -1.0, 0.0);
+    plane_transform.rotate_x(-0.1);
+
     commands
         .spawn(PbrBundle {
             mesh: meshes.add(shape::Plane::from_size(10.0).into()),
@@ -19,17 +22,63 @@ pub fn simple_3d_scene(
             ..default()
         })
         .insert(Collider::cuboid(100.0, 0.1, 100.0))
-        .insert(TransformBundle::from(Transform::from_xyz(0.0, 0.0, 0.0)));
+        .insert(TransformBundle::from(plane_transform));
 
-    // cube
-    commands.spawn(PbrBundle {
-        mesh: meshes.add(Mesh::from(shape::Box::new(
-            BOX_SIZE.x, BOX_SIZE.y, BOX_SIZE.z,
-        ))),
-        material: materials.add(Color::rgba(0.8, 0.7, 0.6, 0.2).into()),
-        transform: Transform::from_xyz(0.0, 2.5, 0.0),
-        ..default()
-    });
+    // cubes
+    commands
+        .spawn(PbrBundle {
+            mesh: meshes.add(Mesh::from(shape::Box::new(
+                BOX_SIZE.x, BOX_SIZE.y, BOX_SIZE.z,
+            ))),
+            material: materials.add(Color::rgba(0.8, 0.7, 0.6, 1.0).into()),
+            ..default()
+        })
+        .insert(Collider::cuboid(
+            BOX_SIZE.x / 2.0,
+            BOX_SIZE.y / 2.0,
+            BOX_SIZE.z / 2.0,
+        ))
+        .insert(TransformBundle::from(Transform::from_xyz(
+            BOX_SIZE.x, 0.0, 0.0,
+        )));
+
+    commands
+        .spawn(PbrBundle {
+            mesh: meshes.add(Mesh::from(shape::Box::new(
+                BOX_SIZE.x, BOX_SIZE.y, BOX_SIZE.z,
+            ))),
+            material: materials.add(Color::rgba(0.8, 0.7, 0.6, 1.0).into()),
+            ..default()
+        })
+        .insert(Collider::cuboid(
+            BOX_SIZE.x / 2.0,
+            BOX_SIZE.y / 2.0,
+            BOX_SIZE.z / 2.0,
+        ))
+        .insert(TransformBundle::from(Transform::from_xyz(
+            -BOX_SIZE.x,
+            0.0,
+            0.0,
+        )));
+
+    commands
+        .spawn(PbrBundle {
+            mesh: meshes.add(Mesh::from(shape::Box::new(
+                BOX_SIZE.x, BOX_SIZE.y, BOX_SIZE.z,
+            ))),
+            material: materials.add(Color::rgba(0.8, 0.7, 0.6, 1.0).into()),
+            ..default()
+        })
+        .insert(Collider::cuboid(
+            BOX_SIZE.x / 2.0,
+            BOX_SIZE.y / 2.0,
+            BOX_SIZE.z / 2.0,
+        ))
+        .insert(TransformBundle::from(Transform::from_xyz(
+            0.0,
+            0.0,
+            -BOX_SIZE.z,
+        )));
 
     // light
     commands.spawn(PointLightBundle {
