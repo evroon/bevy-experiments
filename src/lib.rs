@@ -4,6 +4,7 @@ mod loading;
 mod menu;
 mod rapier_demo;
 mod simple_3d_scene;
+mod terrain;
 mod water;
 
 use bevy::app::App;
@@ -17,8 +18,8 @@ use bevy_rapier3d::{
 use camera_control::CameraControllerPlugin;
 use loading::LoadingPlugin;
 use menu::MenuPlugin;
-use rapier_demo::RapierDemoPlugin;
 use simple_3d_scene::Simple3DScenePlugin;
+use terrain::LowPolyTerrainPlugin;
 
 // This example game uses States to separate logic
 // See https://bevy-cheatbook.github.io/programming/states.html
@@ -46,7 +47,8 @@ impl Plugin for GamePlugin {
             .add_plugin(RapierDebugRenderPlugin::default())
             // .add_plugin(WaterPlugin)
             // .add_plugin(BoidsPlugin)
-            .add_plugin(RapierDemoPlugin)
+            .add_plugin(LowPolyTerrainPlugin)
+            // .add_plugin(RapierDemoPlugin)
             .add_plugin(CameraControllerPlugin);
 
         #[cfg(debug_assertions)]
