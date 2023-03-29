@@ -11,6 +11,7 @@ use bevy::app::App;
 #[cfg(debug_assertions)]
 use bevy::diagnostic::{FrameTimeDiagnosticsPlugin, LogDiagnosticsPlugin};
 use bevy::prelude::*;
+use bevy_egui::EguiPlugin;
 use bevy_rapier3d::{
     prelude::{NoUserData, RapierPhysicsPlugin},
     render::RapierDebugRenderPlugin,
@@ -45,6 +46,7 @@ impl Plugin for GamePlugin {
             .add_plugin(Simple3DScenePlugin)
             .add_plugin(RapierPhysicsPlugin::<NoUserData>::default())
             .add_plugin(RapierDebugRenderPlugin::default())
+            .add_plugin(EguiPlugin)
             // .add_plugin(WaterPlugin)
             // .add_plugin(BoidsPlugin)
             .add_plugin(LowPolyTerrainPlugin)

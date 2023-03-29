@@ -1,4 +1,8 @@
 use bevy::prelude::*;
+use bevy_egui::{
+    egui::{self, Pos2, Ui},
+    EguiContexts,
+};
 
 use crate::camera_control::CameraController;
 
@@ -26,4 +30,28 @@ pub fn simple_3d_scene(mut commands: Commands) {
         },
         camera_controller,
     ));
+}
+
+pub fn camera_ui(light: &mut PointLight, ui: &mut Ui) {
+    ui.label("Intensity");
+    ui.add(egui::Slider::new(&mut light.intensity, 100.0..=2500.0));
+    ui.end_row();
+
+    ui.label("Radius");
+    ui.add(egui::Slider::new(&mut light.radius, 0.0..=10.0));
+    ui.end_row()
+}
+
+pub fn ui_system(mut light_query: Query<&mut PointLight>, mut contexts: EguiContexts) {
+    egui::Window::new("3D world")
+        .current_pos(Pos2 { x: 10., y: 60. })
+        .show(contexts.ctx_mut(), |ui| {
+            egui::Grid::new("my_grid")
+                .num_columns(2)
+                .spacing([40.0, 4.0])
+                .striped(true)
+                .show(ui, |ui| {
+                    light_query.for_each_mut(|mut light| camera_ui(&mut light, ui));
+                });
+        });
 }
