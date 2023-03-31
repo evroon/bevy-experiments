@@ -3,7 +3,7 @@ use system::*;
 
 use bevy::prelude::*;
 
-pub const TERRAIN_SIZE: bevy::prelude::UVec2 = UVec2::new(10, 10);
+pub const TERRAIN_SIZE: bevy::prelude::UVec2 = UVec2::new(256, 256);
 pub const CELL_SIZE: f32 = 1.0;
 
 pub struct LowPolyTerrainPlugin;
