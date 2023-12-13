@@ -10,7 +10,7 @@ use crate::camera_control::CameraController;
 
 use super::BOX_SIZE;
 
-pub fn simple_3d_scene(mut commands: Commands) {
+pub fn simple_3d_scene(mut commands: Commands, mut ambient_light: ResMut<AmbientLight>) {
     let camera_controller = CameraController::default();
     let mut camera_transform = Transform::from_xyz(0.0, 0.0, 0.0);
     camera_transform.rotate_x(-20.0 / 180.0 * PI);
@@ -32,9 +32,12 @@ pub fn simple_3d_scene(mut commands: Commands) {
         },
         camera_controller,
     ));
+
+    ambient_light.color = Color::WHITE;
+    ambient_light.brightness = 0.2;
 }
 
-pub fn camera_ui(light: &mut DirectionalLight, ui: &mut Ui) {
+pub fn directional_light_ui(light: &mut DirectionalLight, ui: &mut Ui) {
     ui.label("Intensity");
     ui.add(egui::Slider::new(&mut light.illuminance, 100.0..=100_000.0));
     ui.end_row();
@@ -53,7 +56,7 @@ pub fn ui_system(mut light_query: Query<&mut DirectionalLight>, mut contexts: Eg
                 .spacing([40.0, 4.0])
                 .striped(true)
                 .show(ui, |ui| {
-                    light_query.for_each_mut(|mut light| camera_ui(&mut light, ui));
+                    light_query.for_each_mut(|mut light| directional_light_ui(&mut light, ui));
                 });
         });
 }

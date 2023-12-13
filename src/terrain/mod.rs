@@ -10,6 +10,6 @@ pub struct LowPolyTerrainPlugin;
 
 impl Plugin for LowPolyTerrainPlugin {
     fn build(&self, app: &mut App) {
-        app.add_startup_system(setup_low_poly_terrain);
+        app.add_systems(Startup, setup_low_poly_terrain);
     }
 }

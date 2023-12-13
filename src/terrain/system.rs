@@ -112,7 +112,13 @@ fn create_mesh(
 
     commands.spawn(PbrBundle {
         mesh: meshes.add(mesh),
-        material: materials.add(Color::rgb(0.3, 0.5, 0.3).into()),
+        material: materials.add(StandardMaterial {
+            base_color: Color::rgb(0.3, 0.5, 0.3).into(),
+            // vary key PBR parameters on a grid of spheres to show the effect
+            metallic: 0.2,
+            perceptual_roughness: 1.0,
+            ..default()
+        }),
         ..default()
     });
 }
