@@ -1,5 +1,4 @@
 mod boids;
-mod camera_control;
 mod loading;
 mod menu;
 mod rapier_demo;
@@ -11,8 +10,8 @@ use bevy::app::App;
 #[cfg(debug_assertions)]
 use bevy::diagnostic::{FrameTimeDiagnosticsPlugin, LogDiagnosticsPlugin};
 use bevy::prelude::*;
+use bevy_panorbit_camera::PanOrbitCameraPlugin;
 use bevy_rapier3d::prelude::{NoUserData, RapierPhysicsPlugin};
-use camera_control::CameraControllerPlugin;
 use loading::LoadingPlugin;
 use menu::MenuPlugin;
 use simple_3d_scene::Simple3DScenePlugin;
@@ -41,7 +40,7 @@ impl Plugin for GamePlugin {
             MenuPlugin,
             Simple3DScenePlugin,
             RapierPhysicsPlugin::<NoUserData>::default(),
-            CameraControllerPlugin,
+            PanOrbitCameraPlugin,
             LowPolyTerrainPlugin,
         ));
 
