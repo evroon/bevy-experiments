@@ -5,6 +5,8 @@ use bevy::{
 };
 use noise::{NoiseFn, Perlin};
 
+type MeshDataResult = (usize, Vec<[f32; 3]>, Vec<[f32; 3]>, Vec<u32>);
+
 #[derive(Clone)]
 struct SampleConfig {
     amplitude: f32,
@@ -76,7 +78,7 @@ fn spawn_mesh(
         PbrBundle {
             mesh: meshes.add(mesh),
             material: materials.add(StandardMaterial {
-                base_color: Color::rgb(0.3, 0.5, 0.3).into(),
+                base_color: Color::rgb(0.3, 0.5, 0.3),
                 // vary key PBR parameters on a grid of spheres to show the effect
                 metallic: 0.2,
                 perceptual_roughness: 1.0,
@@ -88,9 +90,7 @@ fn spawn_mesh(
     ));
 }
 
-fn build_mesh_data(
-    build_config: TerrainBuildConfig,
-) -> (usize, Vec<[f32; 3]>, Vec<[f32; 3]>, Vec<u32>) {
+fn build_mesh_data(build_config: TerrainBuildConfig) -> MeshDataResult {
     let cell_count = usize::try_from(TERRAIN_SIZE.x * TERRAIN_SIZE.y).unwrap();
     let triangle_count = cell_count * 4;
 
@@ -116,7 +116,7 @@ fn build_mesh_data(
             let i_32 = x + y * TERRAIN_SIZE.x;
             let i = usize::try_from(i_32).unwrap();
 
-            positions[i * 4 + 0] = [x_pos, sample_noise(x_pos, z_pos, &sampler), z_pos];
+            positions[i * 4] = [x_pos, sample_noise(x_pos, z_pos, &sampler), z_pos];
             positions[i * 4 + 1] = [
                 x_pos + CELL_SIZE,
                 sample_noise(x_pos + CELL_SIZE, z_pos + CELL_SIZE, &sampler),
@@ -136,22 +136,22 @@ fn build_mesh_data(
             let i_idx_usize = usize::try_from(i_32 * 6).unwrap();
 
             let slice = &[
-                i_32 * 4 + 0,
+                i_32 * 4,
                 i_32 * 4 + 2,
                 i_32 * 4 + 1,
-                i_32 * 4 + 0,
+                i_32 * 4,
                 i_32 * 4 + 1,
                 i_32 * 4 + 3,
             ];
             indices.splice(i_idx_usize..i_idx_usize + 6, slice.iter().cloned());
 
-            let v1 = Vec3::from_array(positions[i * 4 + 0]);
+            let v1 = Vec3::from_array(positions[i * 4]);
             let v2 = Vec3::from_array(positions[i * 4 + 1]);
             let v3 = Vec3::from_array(positions[i * 4 + 2]);
 
             let normal = (v3 - v1).cross(v2 - v1).to_array();
 
-            normals[i * 4 + 0] = normal;
+            normals[i * 4] = normal;
             normals[i * 4 + 1] = normal;
             normals[i * 4 + 2] = normal;
             normals[i * 4 + 3] = normal;

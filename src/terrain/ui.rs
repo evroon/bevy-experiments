@@ -2,9 +2,8 @@ use bevy::{
     asset::{Assets, Handle},
     ecs::{
         entity::Entity,
-        system::{Commands, Query, ResMut},
+        system::{Query, ResMut},
     },
-    pbr::StandardMaterial,
     render::mesh::Mesh,
 };
 use bevy_egui::{
@@ -15,9 +14,7 @@ use bevy_egui::{
 use super::system::{rebuild_terrain, TerrainBuildConfig};
 
 pub fn terrain_ui(
-    commands: Commands,
     meshes: ResMut<Assets<Mesh>>,
-    materials: ResMut<Assets<StandardMaterial>>,
     mut terrain_query: Query<(Entity, &Handle<Mesh>, &mut TerrainBuildConfig)>,
     ui: &mut Ui,
 ) {
@@ -41,15 +38,13 @@ pub fn terrain_ui(
     ui.end_row();
 
     if ui.button("Rebuild terrain").clicked() {
-        rebuild_terrain(commands, meshes, materials, terrain_query);
+        rebuild_terrain(meshes, terrain_query);
     };
     ui.end_row();
 }
 
 pub fn ui_system(
-    commands: Commands,
     meshes: ResMut<Assets<Mesh>>,
-    materials: ResMut<Assets<StandardMaterial>>,
     terrain_query: Query<(Entity, &Handle<Mesh>, &mut TerrainBuildConfig)>,
     mut contexts: EguiContexts,
 ) {
@@ -61,7 +56,7 @@ pub fn ui_system(
                 .spacing([40.0, 4.0])
                 .striped(true)
                 .show(ui, |ui| {
-                    terrain_ui(commands, meshes, materials, terrain_query, ui);
+                    terrain_ui(meshes, terrain_query, ui);
                 });
         });
 }
