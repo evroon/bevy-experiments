@@ -14,7 +14,6 @@ use bevy_egui::{
 
 use super::system::{rebuild_terrain, TerrainBuildConfig};
 
-
 pub fn terrain_ui(
     commands: Commands,
     meshes: ResMut<Assets<Mesh>>,
@@ -24,9 +23,21 @@ pub fn terrain_ui(
 ) {
     ui.add(egui::Slider::new(&mut terrain_query.single_mut().2.seed, 0..=120).text("Seed"));
     ui.end_row();
-    ui.add(egui::Slider::new(&mut terrain_query.single_mut().2.base_amplitude, 0.0..=120.0).text("Base amplitude"));
+    ui.add(
+        egui::Slider::new(
+            &mut terrain_query.single_mut().2.base_amplitude,
+            0.0..=120.0,
+        )
+        .text("Base amplitude"),
+    );
     ui.end_row();
-    ui.add(egui::Slider::new(&mut terrain_query.single_mut().2.base_frequency, 0.0005..=0.05).text("Base frequency"));
+    ui.add(
+        egui::Slider::new(
+            &mut terrain_query.single_mut().2.base_frequency,
+            0.0005..=0.05,
+        )
+        .text("Base frequency"),
+    );
     ui.end_row();
 
     if ui.button("Rebuild terrain").clicked() {

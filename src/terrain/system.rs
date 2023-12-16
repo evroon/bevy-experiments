@@ -1,4 +1,3 @@
-
 use super::{CELL_SIZE, TERRAIN_SIZE};
 use bevy::{
     prelude::*,
@@ -27,10 +26,13 @@ pub struct TerrainBuildConfig {
 
 impl Default for TerrainBuildConfig {
     fn default() -> Self {
-        Self { seed: 123, base_amplitude: 20.0, base_frequency: 0.01 }
+        Self {
+            seed: 123,
+            base_amplitude: 20.0,
+            base_frequency: 0.01,
+        }
     }
 }
-
 
 fn sample_noise(x_pos: f32, z_pos: f32, sampler: &Sampler) -> f32 {
     let mut y = 0.0;
@@ -54,10 +56,7 @@ fn create_mesh(
     spawn_mesh(commands, meshes, mesh, materials, build_config);
 }
 
-fn update_mesh(
-    build_config: TerrainBuildConfig,
-    mesh: &mut Mesh,
-) {
+fn update_mesh(build_config: TerrainBuildConfig, mesh: &mut Mesh) {
     let (triangle_count, positions, normals, indices) = build_mesh_data(build_config);
 
     mesh.insert_attribute(Mesh::ATTRIBUTE_POSITION, positions);
@@ -66,7 +65,13 @@ fn update_mesh(
     mesh.set_indices(Some(mesh::Indices::U32(indices)));
 }
 
-fn spawn_mesh(mut commands: Commands<'_, '_>, mut meshes: ResMut<'_, Assets<Mesh>>, mesh: Mesh, mut materials: ResMut<'_, Assets<StandardMaterial>>, build_config: TerrainBuildConfig) {
+fn spawn_mesh(
+    mut commands: Commands<'_, '_>,
+    mut meshes: ResMut<'_, Assets<Mesh>>,
+    mesh: Mesh,
+    mut materials: ResMut<'_, Assets<StandardMaterial>>,
+    build_config: TerrainBuildConfig,
+) {
     commands.spawn((
         PbrBundle {
             mesh: meshes.add(mesh),
@@ -83,7 +88,9 @@ fn spawn_mesh(mut commands: Commands<'_, '_>, mut meshes: ResMut<'_, Assets<Mesh
     ));
 }
 
-fn build_mesh_data(build_config: TerrainBuildConfig) -> (usize, Vec<[f32; 3]>, Vec<[f32; 3]>, Vec<u32>) {
+fn build_mesh_data(
+    build_config: TerrainBuildConfig,
+) -> (usize, Vec<[f32; 3]>, Vec<[f32; 3]>, Vec<u32>) {
     let cell_count = usize::try_from(TERRAIN_SIZE.x * TERRAIN_SIZE.y).unwrap();
     let triangle_count = cell_count * 4;
 
@@ -166,5 +173,8 @@ pub fn rebuild_terrain(
     mut terrain_query: Query<(Entity, &Handle<Mesh>, &mut TerrainBuildConfig)>,
 ) {
     let (_terrain, mesh_handle, build_config) = terrain_query.single_mut();
-    update_mesh(build_config.to_owned(), meshes.get_mut(mesh_handle).unwrap())
+    update_mesh(
+        build_config.to_owned(),
+        meshes.get_mut(mesh_handle).unwrap(),
+    )
 }

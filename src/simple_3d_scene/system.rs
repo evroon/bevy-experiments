@@ -58,7 +58,6 @@ pub fn directional_light_ui(
     ui.label("Camera position z");
     ui.label(camera_transform.0.translation.z.round().to_string());
     ui.end_row();
-
 }
 
 pub fn ui_system(
@@ -75,11 +74,7 @@ pub fn ui_system(
                 .striped(true)
                 .show(ui, |ui| {
                     light_query.for_each_mut(|mut light| {
-                        directional_light_ui(
-                            &mut light,
-                            camera_query.single(),
-                            ui,
-                        )
+                        directional_light_ui(&mut light, camera_query.single(), ui)
                     });
                 });
         });
