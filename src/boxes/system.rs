@@ -14,7 +14,7 @@ pub fn setup_cubes_scene(
     commands
         .spawn(PbrBundle {
             mesh: meshes.add(shape::Plane::from_size(10.0).into()),
-            material: materials.add(Color::rgb(0.3, 0.5, 0.3).into()),
+            material: materials.add(Color::linear_rgb(0.3, 0.5, 0.3).into()),
             ..default()
         })
         .insert(Collider::cuboid(100.0, 0.1, 100.0))
@@ -26,7 +26,7 @@ pub fn setup_cubes_scene(
             mesh: meshes.add(Mesh::from(shape::Box::new(
                 BOX_SIZE.x, BOX_SIZE.y, BOX_SIZE.z,
             ))),
-            material: materials.add(Color::rgba(0.8, 0.7, 0.6, 1.0).into()),
+            material: materials.add(Color::linear_rgba(0.8, 0.7, 0.6, 1.0).into()),
             ..default()
         })
         .insert(Collider::cuboid(
@@ -43,7 +43,7 @@ pub fn setup_cubes_scene(
             mesh: meshes.add(Mesh::from(shape::Box::new(
                 BOX_SIZE.x, BOX_SIZE.y, BOX_SIZE.z,
             ))),
-            material: materials.add(Color::rgba(0.8, 0.7, 0.6, 1.0).into()),
+            material: materials.add(Color::linear_rgba(0.8, 0.7, 0.6, 1.0).into()),
             ..default()
         })
         .insert(Collider::cuboid(
@@ -62,7 +62,7 @@ pub fn setup_cubes_scene(
             mesh: meshes.add(Mesh::from(shape::Box::new(
                 BOX_SIZE.x, BOX_SIZE.y, BOX_SIZE.z,
             ))),
-            material: materials.add(Color::rgba(0.8, 0.7, 0.6, 1.0).into()),
+            material: materials.add(Color::linear_rgba(0.8, 0.7, 0.6, 1.0).into()),
             ..default()
         })
         .insert(Collider::cuboid(

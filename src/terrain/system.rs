@@ -1,7 +1,7 @@
 use super::{CELL_SIZE, TERRAIN_SIZE};
 use bevy::{
     prelude::*,
-    render::{mesh, render_resource::PrimitiveTopology},
+    render::{mesh, render_asset::RenderAssetUsages, render_resource::PrimitiveTopology},
 };
 use noise::{NoiseFn, Perlin};
 
@@ -53,7 +53,10 @@ fn create_mesh(
     materials: ResMut<Assets<StandardMaterial>>,
     build_config: TerrainBuildConfig,
 ) {
-    let mut mesh = Mesh::new(PrimitiveTopology::TriangleList);
+    let mut mesh = Mesh::new(
+        PrimitiveTopology::TriangleList,
+        RenderAssetUsages::MAIN_WORLD,
+    );
     update_mesh(build_config, &mut mesh);
     spawn_mesh(commands, meshes, mesh, materials, build_config);
 }
@@ -64,7 +67,7 @@ fn update_mesh(build_config: TerrainBuildConfig, mesh: &mut Mesh) {
     mesh.insert_attribute(Mesh::ATTRIBUTE_POSITION, positions);
     mesh.insert_attribute(Mesh::ATTRIBUTE_NORMAL, normals);
     mesh.insert_attribute(Mesh::ATTRIBUTE_UV_0, vec![[0., 0.]; triangle_count]);
-    mesh.set_indices(Some(mesh::Indices::U32(indices)));
+    mesh.insert_indices(mesh::Indices::U32(indices));
 }
 
 fn spawn_mesh(
@@ -78,7 +81,7 @@ fn spawn_mesh(
         PbrBundle {
             mesh: meshes.add(mesh),
             material: materials.add(StandardMaterial {
-                base_color: Color::rgb(0.3, 0.5, 0.3),
+                base_color: Color::linear_rgb(0.3, 0.5, 0.3),
                 // vary key PBR parameters on a grid of spheres to show the effect
                 metallic: 0.2,
                 perceptual_roughness: 1.0,

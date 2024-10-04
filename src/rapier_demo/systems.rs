@@ -26,11 +26,10 @@ pub fn spawn_rigid_bodies(
     for _ in 0..SPHERE_COUNT {
         commands
             .spawn(PbrBundle {
-                mesh: meshes.add(Mesh::from(shape::UVSphere {
+                mesh: meshes.add(Mesh::from(Sphere {
                     radius: SPHERE_RADIUS,
-                    ..default()
                 })),
-                material: materials.add(Color::rgb(0.8, 0.2, 0.2).into()),
+                material: materials.add(Color::linear_rgb(0.8, 0.2, 0.2)),
                 transform: get_random_position_in_box(rng.clone()),
                 ..default()
             })
@@ -43,18 +42,17 @@ pub fn spawn_on_mouseclick(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
-    mouse_button_input: Res<Input<MouseButton>>,
+    mouse_button_input: Res<ButtonInput<MouseButton>>,
 ) {
     let rng = thread_rng();
 
     if mouse_button_input.pressed(MouseButton::Left) {
         commands
             .spawn(PbrBundle {
-                mesh: meshes.add(Mesh::from(shape::UVSphere {
+                mesh: meshes.add(Mesh::from(Sphere {
                     radius: SPHERE_RADIUS,
-                    ..default()
                 })),
-                material: materials.add(Color::rgb(0.2, 0.7, 0.8).into()),
+                material: materials.add(Color::linear_rgb(0.2, 0.7, 0.8)),
                 transform: get_random_position_in_box(rng.clone()),
                 ..default()
             })

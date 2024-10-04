@@ -24,8 +24,8 @@ struct ButtonColors {
 impl Default for ButtonColors {
     fn default() -> Self {
         ButtonColors {
-            normal: Color::rgb(0.15, 0.15, 0.15),
-            hovered: Color::rgb(0.25, 0.25, 0.25),
+            normal: Color::linear_rgb(0.15, 0.15, 0.15),
+            hovered: Color::linear_rgb(0.25, 0.25, 0.25),
         }
     }
 }
@@ -54,12 +54,13 @@ fn setup_menu(
                 TextStyle {
                     font: font_assets.fira_sans.clone(),
                     font_size: 40.0,
-                    color: Color::rgb(0.9, 0.9, 0.9),
+                    color: Color::linear_rgb(0.9, 0.9, 0.9),
                 },
             ));
         });
 }
 
+#[allow(clippy::type_complexity)]
 fn click_play_button(
     button_colors: Res<ButtonColors>,
     mut state: ResMut<NextState<GameState>>,
