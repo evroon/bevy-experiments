@@ -62,4 +62,4 @@ image = { version = "0.25.4", default-features = false }
 bevy_panorbit_camera = "0.19.5"
 
 [build-dependencies]
-embed-resource = "1.8.0"
+embed-resource = "2.5.0"
