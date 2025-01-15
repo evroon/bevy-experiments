@@ -25,14 +25,13 @@ pub fn spawn_rigid_bodies(
 
     for _ in 0..SPHERE_COUNT {
         commands
-            .spawn(PbrBundle {
-                mesh: meshes.add(Mesh::from(Sphere {
+            .spawn((
+                Mesh3d(meshes.add(Mesh::from(Sphere {
                     radius: SPHERE_RADIUS,
-                })),
-                material: materials.add(Color::linear_rgb(0.8, 0.2, 0.2)),
-                transform: get_random_position_in_box(rng.clone()),
-                ..default()
-            })
+                }))),
+                MeshMaterial3d(materials.add(Color::linear_rgb(0.8, 0.2, 0.2))),
+                get_random_position_in_box(rng.clone()),
+            ))
             .insert(RigidBody::Dynamic)
             .insert(Collider::ball(SPHERE_RADIUS));
     }
@@ -48,14 +47,13 @@ pub fn spawn_on_mouseclick(
 
     if mouse_button_input.pressed(MouseButton::Left) {
         commands
-            .spawn(PbrBundle {
-                mesh: meshes.add(Mesh::from(Sphere {
+            .spawn((
+                Mesh3d(meshes.add(Mesh::from(Sphere {
                     radius: SPHERE_RADIUS,
-                })),
-                material: materials.add(Color::linear_rgb(0.2, 0.7, 0.8)),
-                transform: get_random_position_in_box(rng.clone()),
-                ..default()
-            })
+                }))),
+                MeshMaterial3d(materials.add(Color::linear_rgb(0.2, 0.7, 0.8))),
+                get_random_position_in_box(rng.clone()),
+            ))
             .insert(RigidBody::Dynamic)
             .insert(Collider::ball(SPHERE_RADIUS));
     }

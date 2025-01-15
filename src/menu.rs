@@ -35,29 +35,16 @@ fn setup_menu(
     font_assets: Res<FontAssets>,
     button_colors: Res<ButtonColors>,
 ) {
-    commands.spawn(Camera2dBundle::default());
-    commands
-        .spawn(ButtonBundle {
-            style: Style {
-                // size: Size::new(Val::Px(120.0), Val::Px(50.0)),
-                margin: UiRect::all(Val::Auto),
-                justify_content: JustifyContent::Center,
-                align_items: AlignItems::Center,
-                ..Default::default()
-            },
-            background_color: button_colors.normal.into(),
+    commands.spawn(Camera2d);
+    commands.spawn((Button, {
+        Node {
+            // size: Size::new(Val::Px(120.0), Val::Px(50.0)),
+            margin: UiRect::all(Val::Auto),
+            justify_content: JustifyContent::Center,
+            align_items: AlignItems::Center,
             ..Default::default()
-        })
-        .with_children(|parent| {
-            parent.spawn(TextBundle::from_section(
-                "Play",
-                TextStyle {
-                    font: font_assets.fira_sans.clone(),
-                    font_size: 40.0,
-                    color: Color::linear_rgb(0.9, 0.9, 0.9),
-                },
-            ));
-        });
+        }
+    }));
 }
 
 #[allow(clippy::type_complexity)]

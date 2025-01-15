@@ -25,15 +25,14 @@ pub fn spawn_boids(
 
     for _ in 0..BOID_COUNT {
         commands
-            .spawn(PbrBundle {
-                mesh: meshes.add(Mesh::from(Capsule3d {
+            .spawn((
+                Mesh3d(meshes.add(Mesh::from(Capsule3d {
                     half_length: BOID_SIZE.x,
                     radius: BOID_SIZE.y,
-                })),
-                material: materials.add(Color::linear_rgb(0.8, 0.7, 0.6)),
-                transform: get_random_position_in_box(rng.clone()),
-                ..default()
-            })
+                }))),
+                MeshMaterial3d(materials.add(Color::linear_rgb(0.8, 0.7, 0.6))),
+                get_random_position_in_box(rng.clone()),
+            ))
             .insert(RigidBody::Dynamic)
             .insert(Collider::capsule_y(BOID_SIZE.x * 0.5, BOID_SIZE.y * 0.5))
             .insert(BoidComponent);
@@ -41,7 +40,7 @@ pub fn spawn_boids(
 }
 
 pub fn update_boids(mut query: Query<&mut Transform, With<BoidComponent>>, time: Res<Time>) {
-    let delta_seconds = time.delta_seconds();
+    let delta_seconds = time.delta_secs();
 
     for mut transform in &mut query {
         let forward = transform.clone().up();

@@ -78,18 +78,15 @@ fn spawn_mesh(
     build_config: TerrainBuildConfig,
 ) {
     commands.spawn((
-        PbrBundle {
-            mesh: meshes.add(mesh),
-            material: materials.add(StandardMaterial {
-                base_color: Color::linear_rgb(0.3, 0.5, 0.3),
-                // vary key PBR parameters on a grid of spheres to show the effect
-                metallic: 0.2,
-                perceptual_roughness: 1.0,
-                ..default()
-            }),
-            ..default()
-        },
         build_config,
+        Mesh3d(meshes.add(mesh)),
+        MeshMaterial3d(materials.add(StandardMaterial {
+            base_color: Color::linear_rgb(0.3, 0.5, 0.3),
+            // vary key PBR parameters on a grid of spheres to show the effect
+            metallic: 0.2,
+            perceptual_roughness: 1.0,
+            ..default()
+        })),
     ));
 }
 
@@ -173,11 +170,11 @@ pub fn setup_low_poly_terrain(
 
 pub fn rebuild_terrain(
     mut meshes: ResMut<Assets<Mesh>>,
-    mut terrain_query: Query<(Entity, &Handle<Mesh>, &mut TerrainBuildConfig)>,
+    mut terrain_query: Query<(Entity, &mut TerrainBuildConfig)>,
 ) {
-    let (_terrain, mesh_handle, build_config) = terrain_query.single_mut();
-    update_mesh(
-        build_config.to_owned(),
-        meshes.get_mut(mesh_handle).unwrap(),
-    )
+    let (_terrain, build_config) = terrain_query.single_mut();
+    // update_mesh(
+    //     build_config.to_owned(),
+    //     meshes.get_mut(mesh_handle).unwrap(),
+    // )
 }

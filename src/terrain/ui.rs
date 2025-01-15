@@ -4,6 +4,7 @@ use bevy::{
         entity::Entity,
         system::{Query, ResMut},
     },
+    prelude::Mesh3d,
     render::mesh::Mesh,
 };
 use bevy_egui::{
@@ -15,14 +16,14 @@ use super::system::{rebuild_terrain, TerrainBuildConfig};
 
 pub fn terrain_ui(
     meshes: ResMut<Assets<Mesh>>,
-    mut terrain_query: Query<(Entity, &Handle<Mesh>, &mut TerrainBuildConfig)>,
+    mut terrain_query: Query<(Entity, &mut TerrainBuildConfig)>,
     ui: &mut Ui,
 ) {
-    ui.add(egui::Slider::new(&mut terrain_query.single_mut().2.seed, 0..=120).text("Seed"));
+    ui.add(egui::Slider::new(&mut terrain_query.single_mut().1.seed, 0..=120).text("Seed"));
     ui.end_row();
     ui.add(
         egui::Slider::new(
-            &mut terrain_query.single_mut().2.base_amplitude,
+            &mut terrain_query.single_mut().1.base_amplitude,
             0.0..=120.0,
         )
         .text("Base amplitude"),
@@ -30,7 +31,7 @@ pub fn terrain_ui(
     ui.end_row();
     ui.add(
         egui::Slider::new(
-            &mut terrain_query.single_mut().2.base_frequency,
+            &mut terrain_query.single_mut().1.base_frequency,
             0.0005..=0.05,
         )
         .text("Base frequency"),
@@ -45,7 +46,7 @@ pub fn terrain_ui(
 
 pub fn ui_system(
     meshes: ResMut<Assets<Mesh>>,
-    terrain_query: Query<(Entity, &Handle<Mesh>, &mut TerrainBuildConfig)>,
+    terrain_query: Query<(Entity, &mut TerrainBuildConfig)>,
     mut contexts: EguiContexts,
 ) {
     egui::Window::new("Terrain")
