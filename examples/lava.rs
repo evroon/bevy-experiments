@@ -1,10 +1,10 @@
 use bevy::sprite::{Material2d, Material2dPlugin};
-use bevy::window::WindowResized;
 use bevy::{
     prelude::*,
     reflect::TypePath,
     render::render_resource::{AsBindGroup, ShaderRef},
 };
+use bevy_experiments::on_resize_system;
 
 const SHADER_ASSET_PATH: &str = "shaders/lava.wgsl";
 
@@ -40,12 +40,3 @@ impl Material2d for CustomMaterial {
 
 #[derive(Asset, TypePath, AsBindGroup, Debug, Clone)]
 struct CustomMaterial {}
-
-fn on_resize_system(
-    mut mesh: Single<(&Mesh2d, &mut Transform)>,
-    mut resize_reader: EventReader<WindowResized>,
-) {
-    for e in resize_reader.read() {
-        mesh.1.scale = Vec3::new(e.width, e.height, 1.0);
-    }
-}
