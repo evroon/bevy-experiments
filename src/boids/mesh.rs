@@ -52,7 +52,7 @@ pub fn spawn_boids(
     mut materials: ResMut<Assets<ExtendedMaterial<StandardMaterial, BoidsMaterial>>>,
 ) {
     let (position_map, rotation_map, velocity_map) = build_images(images);
-    let mesh = meshes.add(Cone::new(0.3, 1.0));
+    let mesh = meshes.add(Tetrahedron::default());
     let material = materials.add(ExtendedMaterial {
         base: StandardMaterial {
             base_color: PURPLE.into(),

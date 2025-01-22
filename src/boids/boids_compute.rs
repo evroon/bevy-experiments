@@ -28,31 +28,27 @@ const WORKGROUP_SIZE: u32 = 8;
 
 #[derive(Resource, Clone, Copy)]
 pub struct BoidsConfig {
-    pub volume_factor: f32,
-    pub dt: f32,
-    pub density: f32,
-    pub evap_rate: f32,
-    pub deposition_rate: f32,
-    pub min_volume: f32,
-    pub friction: f32,
-    pub drops_per_frame_per_chunk: u32,
-    pub drop_count: u32,
-    pub max_drops: u32,
+    pub align_range: f32,
+    pub avoid_range: f32,
+    pub centering_range: f32,
+    pub matching_factor: f32,
+    pub avoid_factor: f32,
+    pub centering_factor: f32,
+    pub bounds_margin: f32,
+    pub bounds_turn_factor: f32,
 }
 
 impl Default for BoidsConfig {
     fn default() -> Self {
         Self {
-            volume_factor: 100.0,
-            dt: 1.2,
-            density: 1.0,
-            evap_rate: 0.001,
-            deposition_rate: 0.1,
-            friction: 0.05,
-            min_volume: 0.05,
-            drops_per_frame_per_chunk: 1000,
-            drop_count: 0,
-            max_drops: 200_000,
+            align_range: 5.0,
+            avoid_range: 5.0,
+            centering_range: 1.0,
+            matching_factor: 0.01,
+            avoid_factor: 0.05,
+            centering_factor: 0.005,
+            bounds_margin: 2.0,
+            bounds_turn_factor: 0.5,
         }
     }
 }
@@ -75,16 +71,14 @@ pub(crate) fn prepare_uniforms_bind_group(
     let mut rng = thread_rng();
 
     buffer.time_seconds = rng.gen_range(0.0..1e6); // * time.elapsed_seconds_wrapped();
-    buffer.volume_factor = boids_config.volume_factor;
-    buffer.dt = boids_config.dt;
-    buffer.density = boids_config.density;
-    buffer.evap_rate = boids_config.evap_rate;
-    buffer.deposition_rate = boids_config.deposition_rate;
-    buffer.min_volume = boids_config.min_volume;
-    buffer.friction = boids_config.friction;
-    buffer.drops_per_frame_per_chunck = boids_config.drops_per_frame_per_chunk;
-    buffer.drop_count = boids_config.drop_count;
-    buffer.max_drops = boids_config.max_drops;
+    buffer.align_range = boids_config.align_range;
+    buffer.avoid_range = boids_config.avoid_range;
+    buffer.centering_range = boids_config.centering_range;
+    buffer.matching_factor = boids_config.matching_factor;
+    buffer.avoid_factor = boids_config.avoid_factor;
+    buffer.centering_factor = boids_config.centering_factor;
+    buffer.bounds_margin = boids_config.bounds_margin;
+    buffer.bounds_turn_factor = boids_config.bounds_turn_factor;
 
     terrain_uniform_buffer
         .buffer

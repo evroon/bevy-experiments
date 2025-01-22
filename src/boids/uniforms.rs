@@ -10,32 +10,28 @@ use bevy::{
 #[reflect(Resource, Default)]
 pub struct BoidsUniform {
     pub time_seconds: f32,
-    pub volume_factor: f32,
-    pub dt: f32,
-    pub density: f32,
-    pub evap_rate: f32,
-    pub deposition_rate: f32,
-    pub min_volume: f32,
-    pub friction: f32,
-    pub drops_per_frame_per_chunck: u32,
-    pub drop_count: u32,
-    pub max_drops: u32,
+    pub align_range: f32,
+    pub avoid_range: f32,
+    pub centering_range: f32,
+    pub matching_factor: f32,
+    pub avoid_factor: f32,
+    pub centering_factor: f32,
+    pub bounds_margin: f32,
+    pub bounds_turn_factor: f32,
 }
 
 impl Default for BoidsUniform {
     fn default() -> Self {
         Self {
-            volume_factor: 100.0,
             time_seconds: 0.0,
-            dt: 1.2,
-            density: 1.0,
-            evap_rate: 0.001,
-            deposition_rate: 0.1,
-            friction: 0.05,
-            min_volume: 0.05,
-            drops_per_frame_per_chunck: 1000,
-            drop_count: 0,
-            max_drops: 200_000,
+            align_range: 5.0,
+            avoid_range: 5.0,
+            centering_range: 1.0,
+            matching_factor: 0.01,
+            avoid_factor: 0.05,
+            centering_factor: 0.005,
+            bounds_margin: 2.0,
+            bounds_turn_factor: 0.5,
         }
     }
 }
