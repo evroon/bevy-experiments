@@ -39,7 +39,7 @@ fn vertex(vertex: Vertex) -> VertexOutput {
     var out: VertexOutput;
     let model = get_world_from_local(vertex.instance_index);
 
-    let coord = vec2f(f32(vertex.instance_index % TEXTURE_SIZE) / TEXTURE_SIZE_F32, f32(vertex.instance_index / TEXTURE_SIZE) / TEXTURE_SIZE_F32);
+    let coord = vec2f(f32(vertex.instance_index / TEXTURE_SIZE) / TEXTURE_SIZE_F32, f32(vertex.instance_index % TEXTURE_SIZE) / TEXTURE_SIZE_F32);
     let position: vec4f = textureSampleLevel(position_texture, position_sampler, coord, 0.0);
 
     out.instance_index = vertex.instance_index;

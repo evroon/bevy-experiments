@@ -9,29 +9,31 @@ use bevy::{
 #[derive(Clone, Resource, ExtractResource, Reflect, ShaderType)]
 #[reflect(Resource, Default)]
 pub struct BoidsUniform {
-    pub time_seconds: f32,
+    pub boids_count: u32,
     pub align_range: f32,
     pub avoid_range: f32,
     pub centering_range: f32,
-    pub matching_factor: f32,
+    pub align_factor: f32,
     pub avoid_factor: f32,
     pub centering_factor: f32,
     pub bounds_margin: f32,
     pub bounds_turn_factor: f32,
+    pub max_speed: f32,
 }
 
 impl Default for BoidsUniform {
     fn default() -> Self {
         Self {
-            time_seconds: 0.0,
+            boids_count: 200,
             align_range: 5.0,
             avoid_range: 5.0,
             centering_range: 1.0,
-            matching_factor: 0.01,
+            align_factor: 0.01,
             avoid_factor: 0.05,
             centering_factor: 0.005,
             bounds_margin: 2.0,
             bounds_turn_factor: 0.5,
+            max_speed: 0.5,
         }
     }
 }

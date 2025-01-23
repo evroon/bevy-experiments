@@ -1,5 +1,5 @@
 pub mod mesh;
-use mesh::{spawn_bbox, spawn_boids, BoidsMaterial};
+use mesh::{spawn_bbox, spawn_boids, update_visibility, BoidsMaterial};
 mod boids_compute;
 mod images;
 mod ui;
@@ -9,7 +9,7 @@ use bevy::{pbr::ExtendedMaterial, prelude::*};
 
 use self::{boids_compute::BoidsComputePlugin, ui::ui_system};
 
-pub const CELL_SIZE: f32 = 1.0;
+pub const BOX_SIZE: f32 = 1000.0;
 
 pub struct LowPolyTerrainPlugin;
 
@@ -21,6 +21,7 @@ impl Plugin for LowPolyTerrainPlugin {
             .add_plugins(BoidsComputePlugin)
             .add_systems(Startup, spawn_boids)
             .add_systems(Startup, spawn_bbox)
-            .add_systems(Update, ui_system);
+            .add_systems(Update, ui_system)
+            .add_systems(Update, update_visibility);
     }
 }

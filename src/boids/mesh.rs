@@ -2,6 +2,7 @@ use super::{
     boids_compute::BoidsConfig,
     images::{build_images, IMAGE_SIZE},
     uniforms::BoidsImage,
+    BOX_SIZE,
 };
 use bevy::{
     color::palettes::css::PURPLE,
@@ -45,6 +46,9 @@ impl MaterialExtension for BoidsMaterial {
     }
 }
 
+#[derive(Component, PartialEq)]
+pub struct Boid(u32);
+
 pub fn spawn_boids(
     mut commands: Commands,
     images: ResMut<Assets<Image>>,
@@ -73,13 +77,14 @@ pub fn spawn_boids(
     });
 
     // spawn 1000 boids
-    for _ in 0..IMAGE_SIZE * IMAGE_SIZE {
+    for i in 0..IMAGE_SIZE * IMAGE_SIZE {
         commands.spawn((
             // For automatic instancing to take effect you need to
             // use the same mesh handle and material handle for each instance
             Mesh3d(mesh.clone()),
+            Boid(i),
             MeshMaterial3d(material.clone()),
-            Transform::from_xyz(0.0, 0.0, 0.0),
+            Transform::from_xyz(0.0, 0.0, 0.0).with_scale(Vec3::splat(BOX_SIZE / 100.0)),
         ));
     }
     commands.insert_resource(BoidsImage {
@@ -96,7 +101,7 @@ pub fn spawn_bbox(
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
 ) {
-    let mesh = meshes.add(Cuboid::new(100.0, 100.0, 100.0));
+    let mesh = meshes.add(Cuboid::new(BOX_SIZE, BOX_SIZE, BOX_SIZE));
 
     commands.spawn((
         Mesh3d(mesh.clone()),
@@ -107,6 +112,7 @@ pub fn spawn_bbox(
             cull_mode: Some(Face::Front),
             ..Default::default()
         })),
+        Visibility::Visible,
         Transform::from_xyz(0.0, 0.0, 0.0),
     ));
     commands.spawn((
@@ -115,6 +121,20 @@ pub fn spawn_bbox(
             base_color: Srgba::new(1.0, 1.0, 1.0, 1.0).into(),
             ..Default::default()
         })),
-        Transform::from_xyz(0.0, -50.0, 0.0).with_scale(Vec3::new(1.0, 0.01, 1.0)),
+        Transform::from_xyz(0.0, -BOX_SIZE * 0.5, 0.0).with_scale(Vec3::new(1.0, 0.01, 1.0)),
     ));
+}
+
+// This system will move all entities that are descendants of MovedScene (which will be all entities spawned in the scene)
+pub fn update_visibility(
+    mut meshes: Query<(&mut Visibility, &mut Boid)>,
+    config: Res<BoidsConfig>,
+) {
+    for mut vis in &mut meshes.iter_mut() {
+        if vis.1 .0 < config.boids_count {
+            *vis.0 = Visibility::Visible;
+        } else {
+            *vis.0 = Visibility::Hidden;
+        }
+    }
 }

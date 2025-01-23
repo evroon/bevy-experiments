@@ -1,19 +1,21 @@
 const TEXTURE_SIZE: u32 = 128;
 const TEXTURE_SIZE_F32: f32 = 128.0;
-const BOX_SIZE: u32 = 100;
-const BOX_SIZE_F32: f32 = 100.0;
-const HALF_BOX_SIZE_F32: f32 = 50.0;
-const MAX_SPEED = 1.0;
+const BOX_SIZE: u32 = 1000;
+const BOX_SIZE_F32: f32 = f32(BOX_SIZE);
+const HALF_BOX_SIZE_F32: f32 = BOX_SIZE_F32 * 0.5;
+const EPSILON = 0.00001;
 
 struct Config {
+    boids_count: u32,
     align_range: f32,
     avoid_range: f32,
     centering_range: f32,
-    matching_factor: f32,
+    align_factor: f32,
     avoid_factor: f32,
     centering_factor: f32,
     bounds_margin: f32,
     bounds_turn_factor: f32,
+    max_speed: f32,
 };
 
 @group(0) @binding(0) var<uniform> config: Config;
@@ -30,14 +32,19 @@ fn loop_through_neighbors(position: vec3f, velocity: vec3f) -> vec3f {
     var avg_velocity = vec3f();
     var averaging_neighbors = 0;
     var centering_neighbors = 0;
+    var i: u32 = 0;
 
     // Loop through all boids for now even though it's slow
     for (var x: u32 = 0; x < TEXTURE_SIZE; x++) {
+        if i > config.boids_count { break; }
         for (var y: u32 = 0; y < TEXTURE_SIZE; y++) {
+            if i > config.boids_count { break; }
+
             let other_position = textureLoad(position_map, vec2u(x, y)).xyz;
             let distance = length(position - other_position);
+            i++;
 
-            if distance == 0 {
+            if distance < EPSILON {
                 continue;
             }
 
@@ -57,17 +64,17 @@ fn loop_through_neighbors(position: vec3f, velocity: vec3f) -> vec3f {
         }
     }
 
-    if averaging_neighbors > 0 {
-        // Align velocity with other neighbors
-        result_velocity += (avg_velocity / f32(averaging_neighbors) - position) * config.matching_factor;
-    }
-
     if centering_neighbors > 0 {
         // Fly towards the center of mass of neighbors
-        result_velocity += (center / f32(centering_neighbors) - position) * config.centering_factor;
+        result_velocity += ((center / f32(centering_neighbors) - position)) * config.centering_factor;
     }
 
     result_velocity += avoid_velocity * config.avoid_factor;
+
+    if averaging_neighbors > 0 {
+        // Align velocity with other neighbors
+        result_velocity += (avg_velocity / f32(averaging_neighbors) - position) * config.align_factor;
+    }
 
     return result_velocity;
 }
@@ -101,8 +108,8 @@ fn keep_boid_within_bounds(position: vec4f) -> vec4f {
 
 fn limit_speed(velocity: vec4f) -> vec4f {
     let speed = length(velocity);
-    if length(velocity) > MAX_SPEED {
-        return velocity / speed * MAX_SPEED;
+    if length(velocity) > config.max_speed {
+        return velocity / speed * config.max_speed;
     }
     return velocity;
 }
@@ -118,12 +125,23 @@ fn init(@builtin(global_invocation_id) invocation_id: vec3<u32>) {
 
     storageBarrier();
 
-    textureStore(position_map, location_i32, vec4f(location_f32, sin(f32(index)) * BOX_SIZE_F32, 0.0));
+    var z = 0.0;
+    if index > TEXTURE_SIZE {
+        z = sin(f32(index)) * BOX_SIZE_F32;
+    }
+
+    textureStore(position_map, location_i32, vec4f(location_f32, z, 0.0));
     textureStore(velocity_map, location_i32, vec4f(0.1, 1.0, 0.5, 0.0));
 }
 
 @compute @workgroup_size(8, 8, 1)
 fn update(@builtin(global_invocation_id) invocation_id: vec3<u32>) {
+    let index = invocation_id.x * TEXTURE_SIZE + invocation_id.y;
+    if index > config.boids_count {
+        storageBarrier();
+        return;
+    }
+
     let location_i32 = vec2i(i32(invocation_id.x), i32(invocation_id.y));
     let position = textureLoad(position_map, location_i32);
     var velocity = textureLoad(velocity_map, location_i32);

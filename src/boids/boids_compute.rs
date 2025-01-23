@@ -17,7 +17,6 @@ use bevy::{
         Extract, Render, RenderApp, RenderSet,
     },
 };
-use rand::{thread_rng, Rng};
 
 use super::{
     images::IMAGE_SIZE,
@@ -28,27 +27,31 @@ const WORKGROUP_SIZE: u32 = 8;
 
 #[derive(Resource, Clone, Copy)]
 pub struct BoidsConfig {
+    pub boids_count: u32,
     pub align_range: f32,
     pub avoid_range: f32,
     pub centering_range: f32,
-    pub matching_factor: f32,
+    pub align_factor: f32,
     pub avoid_factor: f32,
     pub centering_factor: f32,
     pub bounds_margin: f32,
     pub bounds_turn_factor: f32,
+    pub max_speed: f32,
 }
 
 impl Default for BoidsConfig {
     fn default() -> Self {
         Self {
+            boids_count: 200,
             align_range: 5.0,
             avoid_range: 5.0,
             centering_range: 1.0,
-            matching_factor: 0.01,
+            align_factor: 0.001,
             avoid_factor: 0.05,
             centering_factor: 0.005,
             bounds_margin: 2.0,
             bounds_turn_factor: 0.5,
+            max_speed: 5.0,
         }
     }
 }
@@ -68,17 +71,17 @@ pub(crate) fn prepare_uniforms_bind_group(
     render_device: Res<RenderDevice>,
 ) {
     let buffer = terrain_uniform_buffer.buffer.get_mut();
-    let mut rng = thread_rng();
 
-    buffer.time_seconds = rng.gen_range(0.0..1e6); // * time.elapsed_seconds_wrapped();
+    buffer.boids_count = boids_config.boids_count;
     buffer.align_range = boids_config.align_range;
     buffer.avoid_range = boids_config.avoid_range;
     buffer.centering_range = boids_config.centering_range;
-    buffer.matching_factor = boids_config.matching_factor;
+    buffer.align_factor = boids_config.align_factor;
     buffer.avoid_factor = boids_config.avoid_factor;
     buffer.centering_factor = boids_config.centering_factor;
     buffer.bounds_margin = boids_config.bounds_margin;
     buffer.bounds_turn_factor = boids_config.bounds_turn_factor;
+    buffer.max_speed = boids_config.max_speed;
 
     terrain_uniform_buffer
         .buffer
