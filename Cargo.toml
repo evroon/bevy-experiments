@@ -28,7 +28,7 @@ dev = [
 
 [dependencies]
 bevy = { version = "0.15.2", features=["shader_format_glsl", "file_watcher"]}
-bevy_egui = "0.31.0"
+bevy_egui = "0.33.0"
 
 # keep the following in sync with Bevy's dependencies
 winit = { version = "0.30.9", default-features = false }
