@@ -131,15 +131,19 @@ fn limit_speed(velocity: vec3f) -> vec3f {
 @compute @workgroup_size(8, 8, 1)
 fn init(@builtin(global_invocation_id) invocation_id: vec3<u32>) {
     let index = vec2f(f32(invocation_id.x), f32(invocation_id.y));
+    let max_init_speed = 1.0;
 
     let location_f32 = vec2f(BOX_SIZE_F32 * (index.x / TEXTURE_SIZE_F32 - 0.5), BOX_SIZE_F32 * (index.y / TEXTURE_SIZE_F32 - 0.5));
 
     storageBarrier();
 
-    var z = sin(f32(index.x * 960.2 + index.y * 2.0)) * HALF_BOX_SIZE_F32;
+    let z = sin(f32(index.x * 960.2 + index.y * 2.0)) * HALF_BOX_SIZE_F32;
+    let vx = sin(f32(index.x * 672.2 + index.y * 1.0)) * HALF_BOX_SIZE_F32;
+    let vy = sin(f32(index.x * 44.2 + index.y * 3.0)) * max_init_speed;
+    let vz = sin(f32(index.x * 123.2 + index.y * 4.0)) * max_init_speed;
 
     textureStore(position_map, invocation_id.xy, vec4f(location_f32, z, 0.0));
-    textureStore(velocity_map, invocation_id.xy, vec4f(0.0, 0.0, 0.0, 0.0));
+    textureStore(velocity_map, invocation_id.xy, vec4f(vx, vy, vz, 0.0));
 }
 
 @compute @workgroup_size(8, 8, 1)
