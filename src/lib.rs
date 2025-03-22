@@ -8,6 +8,7 @@ use boids::LowPolyTerrainPlugin;
 use simple_3d_scene::Simple3DScenePlugin;
 
 pub mod boids;
+pub mod math;
 pub mod simple_3d_scene;
 
 pub fn on_resize_system(
