@@ -21,4 +21,5 @@ Port of https://www.shadertoy.com/view/wlBXWK to Bevy as a WGPU shader instead o
 Credit goes to `skythedragon`.
 License: MIT
 
-<img alt="" src=".github/atmosphere-day.png" width="50%" /><img alt="" src=".github/atmosphere-night.png" width="50%" />
+<img alt="" src=".github/atmosphere-day.png" width="100%" />
+<img alt="" src=".github/atmosphere-night.png" width="100%" />
