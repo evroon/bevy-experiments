@@ -27,7 +27,7 @@ dev = [
 ]
 
 [dependencies]
-bevy = { version = "0.15.3", features=["shader_format_glsl", "file_watcher"]}
+bevy = { version = "0.16.0", features=["shader_format_glsl", "file_watcher"]}
 bevy_egui = "0.33.0"
 bevy_panorbit_camera = "0.25.0"
 rand = "0.9.1"
