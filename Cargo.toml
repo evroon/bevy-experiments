@@ -33,4 +33,4 @@ bevy_panorbit_camera = "0.25.0"
 rand = "0.9.1"
 
 # keep the following in sync with Bevy's dependencies
-winit = { version = "0.30.9", default-features = false }
+winit = { version = "0.30.10", default-features = false }
