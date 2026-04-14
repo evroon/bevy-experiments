@@ -30,7 +30,7 @@ dev = [
 bevy = { version = "0.16.1", features=["shader_format_glsl", "file_watcher"]}
 bevy_egui = "0.35.1"
 bevy_panorbit_camera = "0.27.2"
-rand = "0.9.1"
+rand = "0.9.4"
 
 # keep the following in sync with Bevy's dependencies
-winit = { version = "0.30.10", default-features = false }
+winit = { version = "0.30.13", default-features = false }
