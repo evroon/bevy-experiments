@@ -10,6 +10,6 @@ impl Plugin for Simple3DScenePlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Startup, simple_3d_scene)
             .add_systems(Update, ui_system)
-            .add_plugins(EguiPlugin);
+            .add_plugins(EguiPlugin::default());
     }
 }
