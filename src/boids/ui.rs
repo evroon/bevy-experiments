@@ -48,9 +48,12 @@ pub fn boids_ui(config: &mut BoidsConfig, ui: &mut Ui) {
 }
 
 pub fn ui_system(mut boids_config: ResMut<BoidsConfig>, mut contexts: EguiContexts) {
+    let Ok(ctx) = contexts.ctx_mut() else {
+        return;
+    };
     egui::Window::new("Boids")
         .current_pos(Pos2 { x: 10., y: 320. })
-        .show(contexts.ctx_mut(), |ui| {
+        .show(ctx, |ui| {
             egui::Grid::new("3dworld_grid")
                 .num_columns(2)
                 .spacing([40.0, 4.0])

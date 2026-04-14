@@ -75,19 +75,23 @@ pub fn ui_system(
     mut contexts: EguiContexts,
     // mut fog: Query<&mut DistanceFog>,
 ) {
+    let Ok(ctx) = contexts.ctx_mut() else {
+        return;
+    };
     egui::Window::new("3D world")
         .current_pos(Pos2 { x: 10., y: 10. })
-        .show(contexts.ctx_mut(), |ui| {
+        .show(ctx, |ui| {
             egui::Grid::new("3dworld_grid")
                 .num_columns(2)
                 .spacing([40.0, 4.0])
                 .striped(true)
                 .show(ui, |ui| {
                     light_query.iter_mut().for_each(|mut light| {
+                        let Ok(camera) = camera_query.single() else {
+                            return;
+                        };
                         directional_light_ui(
-                            &mut light,
-                            camera_query.single(),
-                            ui,
+                            &mut light, camera, ui,
                             // fog.single_mut(),
                         )
                     });
