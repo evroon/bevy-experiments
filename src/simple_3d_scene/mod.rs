@@ -1,10 +1,8 @@
-mod system;
+pub mod system;
 use bevy_egui::EguiPlugin;
-use system::*;
+use system::{simple_3d_scene, ui_system};
 
 use bevy::prelude::*;
-
-pub const BOX_SIZE: bevy::prelude::Vec3 = Vec3::new(10.0, 5.0, 10.0);
 
 pub struct Simple3DScenePlugin;
 

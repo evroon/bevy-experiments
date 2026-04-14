@@ -1,18 +1,27 @@
-mod components;
-mod systems;
-use systems::*;
+pub mod mesh;
+use mesh::{spawn_bbox, spawn_boids, update_visibility, BoidsMaterial};
+mod boids_compute;
+mod images;
+mod ui;
+mod uniforms;
 
-use bevy::prelude::*;
+use bevy::{pbr::ExtendedMaterial, prelude::*};
 
-pub const BOID_SIZE: bevy::prelude::Vec2 = Vec2::new(0.15, 0.075); // height, radius
-pub const BOID_COUNT: i32 = 40;
-pub const BOID_MARGIN_FROM_EDGE: f32 = BOID_SIZE.x / 2.0 + BOID_SIZE.y;
+use self::{boids_compute::BoidsComputePlugin, ui::ui_system};
 
-pub struct BoidsPlugin;
+pub const BOX_SIZE: f32 = 1000.0;
 
-impl Plugin for BoidsPlugin {
+pub struct LowPolyTerrainPlugin;
+
+impl Plugin for LowPolyTerrainPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Startup, spawn_boids)
-            .add_systems(Update, update_boids);
+        app.add_plugins(MaterialPlugin::<
+            ExtendedMaterial<StandardMaterial, BoidsMaterial>,
+        >::default())
+            .add_plugins(BoidsComputePlugin)
+            .add_systems(Startup, spawn_boids)
+            .add_systems(Startup, spawn_bbox)
+            .add_systems(Update, ui_system)
+            .add_systems(Update, update_visibility);
     }
 }

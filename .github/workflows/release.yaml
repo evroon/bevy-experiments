@@ -26,7 +26,7 @@ jobs:
         id: tag
         uses: dawidd6/action-get-tag@v1
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v6
       - name: Remove build script
         run: |
           rm build.rs
@@ -78,7 +78,7 @@ jobs:
         id: tag
         uses: dawidd6/action-get-tag@v1
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v6
       - name: Install rust toolchain
         uses: actions-rs/toolchain@v1
         with:
@@ -114,7 +114,7 @@ jobs:
         id: tag
         uses: dawidd6/action-get-tag@v1
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v6
       - name: Install rust toolchain
         uses: actions-rs/toolchain@v1
         with:
@@ -149,7 +149,7 @@ jobs:
         id: tag
         uses: dawidd6/action-get-tag@v1
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v6
       - name: Install rust toolchain
         uses: actions-rs/toolchain@v1
         with:
@@ -158,7 +158,7 @@ jobs:
       - name: Install Dependencies
         run: sudo apt-get update; sudo apt-get install pkg-config libx11-dev libasound2-dev libudev-dev
       - name: Install trunk
-        uses: jetli/trunk-action@v0.1.0
+        uses: jetli/trunk-action@v0.5.0
         with:
           version: latest
       - name: Add wasm target

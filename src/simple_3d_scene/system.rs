@@ -7,24 +7,25 @@ use bevy_egui::{
 };
 use bevy_panorbit_camera::PanOrbitCamera;
 
+/// set up a simple 3D scene
 pub fn simple_3d_scene(mut commands: Commands, mut ambient_light: ResMut<AmbientLight>) {
     let mut camera_transform = Transform::from_xyz(0.0, 0.0, 0.0);
     camera_transform.rotate_x(-30.0 / 180.0 * PI);
 
-    commands.spawn(DirectionalLightBundle {
-        directional_light: DirectionalLight {
-            illuminance: 22000.0,
+    commands.spawn((
+        DirectionalLight {
+            illuminance: 8000.0,
             shadows_enabled: true,
             ..default()
         },
-        transform: camera_transform,
-        ..default()
-    });
+        camera_transform,
+    ));
     commands.spawn((
-        Camera3dBundle {
-            transform: Transform::from_xyz(-240.0, 240.0, 000.0).looking_at(Vec3::ZERO, Vec3::Y),
+        Camera {
+            hdr: true,
             ..default()
         },
+        Transform::from_xyz(1000.0, 1800.0, 1000.0).looking_at(Vec3::new(0., 0., 0.), Vec3::Y),
         PanOrbitCamera {
             button_pan: MouseButton::Middle,
             button_orbit: MouseButton::Left,
@@ -33,13 +34,14 @@ pub fn simple_3d_scene(mut commands: Commands, mut ambient_light: ResMut<Ambient
     ));
 
     ambient_light.color = Color::WHITE;
-    ambient_light.brightness = 0.4;
+    ambient_light.brightness = 200.0;
 }
 
 pub fn directional_light_ui(
     light: &mut DirectionalLight,
     camera_transform: (&Transform, &Camera),
     ui: &mut Ui,
+    // mut fog: Mut<DistanceFog>,
 ) {
     ui.label("Intensity");
     ui.add(egui::Slider::new(&mut light.illuminance, 100.0..=100_000.0));
@@ -58,12 +60,20 @@ pub fn directional_light_ui(
     ui.label("Camera position z");
     ui.label(camera_transform.0.translation.z.round().to_string());
     ui.end_row();
+
+    // if ui.button("Toggle fog").clicked() {
+    //     let a = fog.color.alpha();
+    //     fog.color.set_alpha(1.0 - a);
+    // };
+    // ui.add(egui::Slider::new(&mut fog.falloff., 100.0..=100_000.0));
+    ui.end_row();
 }
 
 pub fn ui_system(
     mut light_query: Query<&mut DirectionalLight>,
     camera_query: Query<(&Transform, &Camera)>,
     mut contexts: EguiContexts,
+    // mut fog: Query<&mut DistanceFog>,
 ) {
     egui::Window::new("3D world")
         .current_pos(Pos2 { x: 10., y: 10. })
@@ -74,7 +84,12 @@ pub fn ui_system(
                 .striped(true)
                 .show(ui, |ui| {
                     light_query.iter_mut().for_each(|mut light| {
-                        directional_light_ui(&mut light, camera_query.single(), ui)
+                        directional_light_ui(
+                            &mut light,
+                            camera_query.single(),
+                            ui,
+                            // fog.single_mut(),
+                        )
                     });
                 });
         });
