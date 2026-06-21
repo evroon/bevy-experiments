@@ -7,7 +7,7 @@ use bevy::{
 };
 use bevy_experiments::math::smooth_stop;
 use bevy_panorbit_camera::{PanOrbitCamera, PanOrbitCameraPlugin};
-use rand::{rng, Rng};
+use rand::{rng, RngExt};
 
 const SHADER_ASSET_PATH: &str = "shaders/smoke.wgsl";
 const PARTICLE_SCALE_START: f32 = 0.03;
